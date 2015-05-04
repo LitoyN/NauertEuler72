@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <math.h>
+#include <Windows.h>
 
 
 using namespace std;
@@ -40,25 +41,45 @@ int primeSieve(int upperBound){
 
 }
 
+void printArray(bool* array, int size){
+    for(int i = 0; i < size; i++){
+        if(array[i])
+            cout << "1, ";
+        else
+            cout << "0, ";
+    }
+    cout << endl;
+}
+
 int phi(int number){
     
-    int phiValue = number - 1;
+    double phiValue = number;
     int numberSR = ceil(sqrt(number));
-    //cout << numberSR << endl;
-    
-    
+    bool *array = new bool[number + 1];
+    memset(array, 0, sizeof(bool) * (number + 1));
 
-    for(int i = 2; i <= numberSR; i++){
-        if(number % i == 0){
-            if(number/i == numberSR){
-                return i * i - i;
+    //printArray(array, number + 1);
+    
+    for(int i = 2; i <= number; i++){
+        if(!array[i]){
+            
+            if(number % i == 0){
+                cout << i << endl;
+                for(int j = i; j <= number; j += i){
+                    array[j] = true;
+                }
+                //printArray(array, numberSR + 1);
+                //cout << phiValue << endl;
+                phiValue *= (float)(1-(1/(float)i));
+                //cout << phiValue << endl;
             }
-            //cout << i << endl;
-            //cout << number/i << endl;
-            cout << (i-1) * phi(number/i) << endl;
-            return i * phi(number/i);
         }
     }
+    
+    if(phiValue == number){
+        phiValue--;
+    }
+    
     
     return phiValue;
 }
@@ -68,14 +89,15 @@ int phi(int number){
  */
 int main(int argc, char** argv) {
     
-    int upperLimit = 1000000;
+    //int upperLimit = 1000000;
     
-    primeSieve(upperLimit);
+    //primeSieve(upperLimit);
     
-    int number = 114;
+    int number = 1000000;
     int phiVal = phi(number);
     
     cout << "phi value for " << number << ": " << phiVal;
+    
 
     return 0;
 }
