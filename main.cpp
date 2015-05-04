@@ -13,33 +13,7 @@
 
 using namespace std;
 
-int *primes = new int[78500];
-int primeCounter = 0;
-
-int primeSieve(int upperBound){
-    
-    int upperBoundSquareRoot = (int)sqrt((double)upperBound);
-    bool *isComposite = new bool[upperBound + 1];
-    primeCounter = 0;
-
-    memset(isComposite, 0, sizeof(bool) * (upperBound + 1));
-    for (int m = 2; m <= upperBoundSquareRoot; m++) {
-          if (!isComposite[m]) {
-                primes[primeCounter] = m;
-                primeCounter++;
-                for (int k = m * m; k <= upperBound; k += m)
-                      isComposite[k] = true;
-          }
-    }
-    for (int m = upperBoundSquareRoot; m <= upperBound; m++)
-          if (!isComposite[m]){
-                primes[primeCounter] = m;
-                primeCounter++;
-          }
-    delete [] isComposite;
-    cout << endl << "Number of Primes: " << primeCounter << endl;
-
-}
+unsigned long long int rpfCounter = 0;
 
 void printArray(bool* array, int size){
     for(int i = 0; i < size; i++){
@@ -53,18 +27,16 @@ void printArray(bool* array, int size){
 
 int phi(int number){
     
-    double phiValue = number;
+    int phiValue = number;
     int numberSR = ceil(sqrt(number));
     bool *array = new bool[number + 1];
     memset(array, 0, sizeof(bool) * (number + 1));
 
-    //printArray(array, number + 1);
-    
     for(int i = 2; i <= number; i++){
         if(!array[i]){
             
             if(number % i == 0){
-                cout << i << endl;
+                //cout << i << endl;
                 for(int j = i; j <= number; j += i){
                     array[j] = true;
                 }
@@ -82,6 +54,7 @@ int phi(int number){
     
     
     return phiValue;
+    delete [] array;
 }
 
 /*
@@ -89,14 +62,16 @@ int phi(int number){
  */
 int main(int argc, char** argv) {
     
-    //int upperLimit = 1000000;
+    int long upperLimit = 1000000;
     
-    //primeSieve(upperLimit);
     
-    int number = 1000000;
-    int phiVal = phi(number);
+    for(int i = 2; i <= upperLimit; i++){
+        rpfCounter += (int)phi(i);
+    }
     
-    cout << "phi value for " << number << ": " << phiVal;
+    cout << "Total # of reduced proper fractions with denominator <= " << upperLimit << ": " << rpfCounter;
+    
+    
     
 
     return 0;
